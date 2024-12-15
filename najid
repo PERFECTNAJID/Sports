@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Najid Haque - Live TV</title>
+
+    <style>
+        /* Base styles */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #464646;
+        }
+
+        header {
+            color: white;
+            padding: 15px;
+            width: 100%;
+            text-align: center;
+            font-size: 18px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tv-container {
+            display: flex;
+            width: 90%;
+            height: 80%;
+            max-width: 1200px;
+            flex-direction: column;
+        }
+
+        .channel-list {
+            width: 100%;
+            background: #333;
+            color: white;
+            overflow-y: auto;
+            padding: 10px;
+            box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        }
+
+        .channel-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 8px;
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        }
+
+        .channel-item img {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+            border-radius: 8px;
+        }
+
+        .channel-item:hover {
+            background-color: #444;
+            transform: scale(1.05);
+        }
+
+        .player {
+            width: 100%;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1;
+            box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        }
+
+        #player {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        Najid Haque - Live TV
+    </header>
+
+    <div class="tv-container">
+        <div class="player" id="player"></div>
+        <div class="channel-list" id="channel-list"></div>
+    </div>
+
+    <!-- Clappr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/clappr@latest/dist/clappr.min.js"></script>
+
+    <script>
+        // Define the channels from the M3U playlist
+        const channels = [
+            {
+                name: "Asian TV",
+                logo: "https://i.postimg.cc/hjtn78RX/Background-Eraser-20240628-100253285.png",
+                url: "https://mtlivestream.com/asian/ytlive/index.m3u8|Referer=https://mtlivestream.com"
+            },
+            {
+                name: "আনন্দ TV",
+                logo: "https://i.postimg.cc/pT3MHHgC/Background-Eraser-20240628-152508647.png",
+                url: "https://static.jagobd.com.bd/live-orgin/anandatv.stream/playlist.m3u8|referer=https://www.jagobd.com"
+            },
+            {
+                name: "ATN বাংলা",
+                logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/ATN_Bangla.svg/2560px-ATN_Bangla.svg.png",
+                url: "https://static.jagobd.com.bd/live-orgin/atnbd-8-org.stream/playlist.m3u8|referer=https://www.jagobd.com"
+            }
+            // Add more channels as needed
+        ];
+
+        // Function to render the channel list
+        function renderChannelList(channels) {
+            const channelList = document.getElementById('channel-list');
+            channels.forEach((channel) => {
+                const channelItem = document.createElement('div');
+                channelItem.classList.add('channel-item');
+                channelItem.innerHTML = `
+                    <img src="${channel.logo}" alt="${channel.name}">
+                    <span>${channel.name}</span>
+                `;
+                channelItem.addEventListener('click', () => playChannel(channel.url));
+                channelList.appendChild(channelItem);
+            });
+        }
+
+        // Initialize Clappr player with default stream
+        let player = new Clappr.Player({
+            parentId: '#player',
+            source: channels[0].url, // Set the first channel as default stream
+            width: '100%',
+            height: '100%',
+            autoPlay: true,
+            mute: false,
+        });
+
+        // Function to play the selected channel
+        function playChannel(url) {
+            player.load(url);
+            player.play();
+        }
+
+        // Render the channel list
+        renderChannelList(channels);
+    </script>
+</body>
+</html>
